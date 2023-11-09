@@ -1,0 +1,77 @@
+/*Creamos base de datos*/
+CREATE DATABASE Dulceria;
+
+/*Creamos tablas*/
+CREATE TABLE Productos (
+	product_id varchar(30),
+	nombre varchar(50),
+	marca varchar(50),
+	contenido varchar(50),
+	precio decimal,
+	stock int
+);
+
+CREATE TABLE Promociones (
+	promocion_id serial,
+	id_product varchar(30),
+	descripcion varchar(75),
+	fecha_inicio date,
+	fecha_final date
+);
+DROP TABLE Productos;
+
+CREATE TABLE Usuarios (
+	id_user serial, 
+	nombre varchar(50),
+	pass varchar(50)
+);
+
+/*Creacion de llaves primarias*/
+ALTER TABLE Productos ADD CONSTRAINT PK_productos PRIMARY KEY (product_id);
+ALTER TABLE Promociones ADD CONSTRAINT PK_promociones PRIMARY KEY (promocion_id);
+ALTER TABLE Usuarios ADD CONSTRAINT PK_usuarios PRIMARY KEY (id_user);
+
+/*Cracion de llaves foraneas*/
+ALTER TABLE Promociones ADD CONSTRAINT FK_promo_product FOREIGN KEY (id_product) REFERENCES Productos(product_id);
+
+/*Insercion de datos tabla Productos*/
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('MazapanOri', 'Mazapan original', 'La Rosa', '30 piezas', 78, 10);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('OrbitPolar', 'Orbit polar', 'Orbit', '40 piezas de 4 pastillas', 90,15);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('TocayosFradi', 'Tocayos', 'Fradi dulces', '24 piezas', 46, 20);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('RanitaRosa', 'Ranita CROA!', 'La Rosa', '12 piezas', 46, 5);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('VaquitaC', 'Chiclosos La vaquita', 'Canels', '400 gramos', 62, 5);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('MNugs', 'Mini Nugs', 'La Rosa', '24 piezas', 48, 3);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('PFresa', 'PicaFresa', 'Vero', '100 piezas', 60, 10);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('MBubuLubu', 'Mini Bubulubu', 'Ricolino', '25 piezas', 76, 15);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('Aciditos', 'Aciduladitos con chile', 'La Rosa', '100 piezas', 52,12);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('PiguiCache', 'Cachetada', 'Pigui', '20 piezas', 16, 10);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('PaletaRosa', 'Paleta de la Rosa', 'La Rosa', '50 piezas', 90, 15);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('BrochaVero', 'Sandi Brochas', 'Vero', '40 piezas', 68, 20);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('PaleCoca', 'Chescola', 'Alteño', '40 piezas', 40, 10);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('Tamborines', 'Tamborines', 'Prisma', '100 piezas', 62, 3);
+INSERT INTO Productos(product_id, nombre, marca, contenido, precio, stock) VALUES ('MMalvabon', 'Mini Malvabon', 'La Rosa', '30 piezas', 46, 1);
+
+/*Insercion de datos Promociones*/
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('PiguiCache', '3X2', '2023/11/6', '2023/11/13');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('PFresa', '2x$100', '2023/11/6', '2023/11/9');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('PaleCoca', '1x$32', '2023/11/13', '2023/11/16');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('MMalvabon', '2x1', '2023/11/16', '2023/11/19');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('Aciditos', '3x$124', '2023/11/19', '2023/11/23');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('Tamborines', '1x$52', '2023/11/22', '2023/11/25');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('TocayosFradi', '2x1', '2023/11/22', '2023/11/25');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('RanitaRosa', '2x$110', '2023/11/22', '2023/11/25');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('MNugs', '1x$32', '2023/11/26', '2023/11/28');
+INSERT INTO Promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('RanitaRosa', '1x$40', '2023/11/27', '2023/11/29');
+
+/*Insercion de datos Usuarios*/
+/*Dueña*/
+INSERT INTO Usuarios (nombre, pass) VALUES ('Rosa Maria', 'gota1025');
+/*Hermana de dueña*/
+INSERT INTO Usuarios (nombre, pass) VALUES ('Virginia Lopez', 'lanny50');
+/*Cuenta administradores*/
+INSERT INTO Usuarios (nombre, pass) VALUES ('Admin', 'admin');
+
+/*Selecciones*/
+SELECT * FROM Productos;
+SELECT * FROM Promociones;
+SELECT * FROM Usuarios;

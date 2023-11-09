@@ -15,7 +15,7 @@ app.get('/CProducts', async (req, res) => {
 //Insercion con la api en tabla productos POST
 app.post('/PProducts', (req, res) => {
     const productData = req.body
-    guardarProductos(productData.id, productData.nombre,productData.marca, productData.cantidad, productData.precio);
+    guardarProductos(productData.product_id, productData.nombre,productData.marca, productData.contenido, productData.precio, productData.stock);
     console.log(req.body)
     res.send('Insertado')
   })
@@ -29,7 +29,7 @@ app.delete('/DelProducts', (req, res) => {
 //Actualizar con la api en la tabla Productos PUT
 app.put('/PuProducts', (req,res)=>{
     const product = req.body;
-    actualizarProductos(product.id, product.nombre, product.marca, product.cantidad, product.precio);
+    actualizarProductos(product.product_id, product.nombre, product.marca, product.contenido, product.precio, product.stock);
     res.send('se Actualizo');
 
 })
@@ -70,7 +70,7 @@ app.listen(port, () => {
 
 
 //Falta agrega el stock se guarda en la base de datos
-async function guardarProductos(id, nombre, marca, cantidad, precio){
+async function guardarProductos(product_id, nombre, marca, contenido, precio, stock){
     //debugger;
     const client = new Client({
         user: 'admin',//usuario
@@ -82,7 +82,7 @@ async function guardarProductos(id, nombre, marca, cantidad, precio){
     await client.connect();
     //Para realizar una consulta SQL
     const comand = 
-    "INSERT INTO productos (product_id, nombre, marca, contenido, precio) VALUES ('"+id+"','"+nombre+"','"+marca+"','"+cantidad+"',"+precio+")";
+    "INSERT INTO productos (product_id, nombre, marca, contenido, precio, stock) VALUES ('"+product_id+"','"+nombre+"','"+marca+"','"+contenido+"',"+precio+", '"+stock+"')";
     const res = await client.query(comand);
     const result = res.rows;
     console.log(res.rows);
@@ -125,7 +125,7 @@ async function eliminarProducto(id){
 };
 
 //Funcion que actualiza un registro de la base de datos
-async function actualizarProductos(id, nombre, marca, cantidad, precio){
+async function actualizarProductos(product_id, nombre, marca, contenido, precio, stock){
     debugger;
     const client = new Client({
         user: 'admin',
@@ -136,7 +136,7 @@ async function actualizarProductos(id, nombre, marca, cantidad, precio){
     });
     await client.connect();
     const executeQuery = 
-    "UPDATE productos SET nombre ='"+nombre+"', marca = '"+marca+"', contenido = '"+cantidad+"', precio = "+precio+" WHERE product_id = '"+id+"'";
+    "UPDATE productos SET nombre ='"+nombre+"', marca = '"+marca+"', contenido = '"+contenido+"', precio = "+precio+", stock = "+stock+" WHERE product_id = '"+product_id+"'";
     await client.query(executeQuery);
     await client.end();
 }
