@@ -61,13 +61,37 @@ app.put('/PuPromos', (req,res)=>{
     res.send('Se actualizo');
 })
 
+//Consultar usuarios
+app.get('/CUsers', async (req, res) => {
+    const user= await consultarUsuarios();
+    res.send(user);
+})
+
+app.post('/PUsers', (req, res) => {
+    const userData = req.body;
+    insertarUsuarios(userData.nombre, userData.pass);
+    res.send("Insertado");
+})
+
+app.put('/PuUser', (req, res) => {
+    const userData = req.body;
+    actualizarUsuarios(userData.id_user, userData.nombre, userData.pass);
+    res.send("Actualizado");
+})
+
+app.delete('/DUser', (req,res) => {
+    eliminarUsuarios(req.body.id_user);
+    res.send("Eliminado");
+})
+
 //Se da de alta el puerto con el que se va a trabajar
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
 
-
+/////// Funciones
+//////////////////////////// - productos
 
 //Falta agrega el stock se guarda en la base de datos
 async function guardarProductos(product_id, nombre, marca, contenido, precio, stock){
@@ -141,7 +165,7 @@ async function actualizarProductos(product_id, nombre, marca, contenido, precio,
     await client.end();
 }
 
-
+///////////////////////////////// - promociones
 //funcion que consulta todas las promociones en la base de datos
 async function consultarTodasPromos(){
     const client = new Client({
@@ -174,9 +198,7 @@ async function guardarPromos(id_product,descripcion, fecha_inicio, fecha_final){
     //Para realizar una consulta SQL
     const comand = 
     "INSERT INTO promociones (id_product, descripcion, fecha_inicio, fecha_final) VALUES ('"+id_product+"','"+descripcion+"','"+fecha_inicio+"','"+fecha_final+"')";
-    const res = await client.query(comand);
-    const result = res.rows;
-    console.log(res.rows);
+    await client.query(comand);
     await client.end();
 };
 
@@ -198,7 +220,7 @@ async function eliminarPromos(id_product){
 
 //Funcion que actualizar las promociones
 async function actualizarPromos(id_product, descripcion, fecha_inicio, fecha_final){
-    debugger;
+    //debugger;
     const client = new Client({
         user: 'admin',
         host: 'localhost',
@@ -209,6 +231,68 @@ async function actualizarPromos(id_product, descripcion, fecha_inicio, fecha_fin
     await client.connect();
     const executeQuery = 
     "UPDATE promociones SET descripcion = '"+descripcion+"', fecha_inicio = '"+fecha_inicio+"', fecha_final = '"+fecha_final+"' WHERE id_product = '"+id_product+"'";
+    await client.query(executeQuery);
+    await client.end();
+}
+////////////////////////////////////// - Usuarios
+//Metodo que consulta usuarios
+async function consultarUsuarios(){
+    const client = new Client({
+        user: 'admin',
+        host: 'localhost',
+        database: 'dulceria',
+        password: 'root',
+        port: 5432
+    });
+    await client.connect();
+    const executeQuery = "SELECT * FROM usuarios";
+    const res = await client.query(executeQuery);
+    const result = res.rows;
+    await client.end();
+    return result;
+}
+
+async function insertarUsuarios(nombre, pass){
+    const client = new Client({
+        user: 'admin',
+        host: 'localhost',
+        database: 'dulceria',
+        password: 'root',
+        port: 5432
+    });
+    await client.connect();
+    const executeQuery = 
+    "INSERT INTO usuarios (nombre, pass) VALUES ('"+nombre+"', '"+pass+"')";
+    await client.query(executeQuery);
+    await client.end();
+}
+
+async function actualizarUsuarios(id_user, nombre, pass){
+    const client = new Client({
+        user: 'admin',
+        host: 'localhost',
+        database: 'dulceria',
+        password: 'root',
+        port: 5432
+    });
+    await client.connect();
+    const executeQuery = 
+    "UPDATE usuarios SET nombre = '"+nombre+"', pass = '"+pass+"' WHERE id_user = "+id_user+"";
+    await client.query(executeQuery);
+    await client.end();
+
+}
+
+async function eliminarUsuarios(id_user){
+    const client = new Client({
+        user: 'admin',
+        host: 'localhost',
+        database: 'dulceria',
+        password: 'root',
+        port: 5432
+    });
+    await client.connect();
+    const executeQuery = "DELETE FROM usuarios WHERE id_user = "+id_user;
     await client.query(executeQuery);
     await client.end();
 }
